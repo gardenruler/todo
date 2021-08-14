@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:mariadb:testdb:3306/test
+  jpa:
+    hibernate:
+      ddl-auto: update

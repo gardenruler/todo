@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  localdb:
+    container_name: gardenruler-todo-localdb
+    image: mariadb:10.6.2-focal
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: gardenruler
+      MYSQL_DATABASE: test
+      TZ: Asia/Seoul
+    restart: always
+    ports:
+      - "3306:3306"
