@@ -1,19 +1,30 @@
 import React, { useState } from 'react';
 
-const TodoInput = (): JSX.Element => {
+export interface TodoProps {
+  onInsert: (value: string) => void;
+}
+
+const TodoInput = ({ onInsert }: TodoProps): JSX.Element => {
   const [todo, setTodo] = useState('');
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTodo(e.target.value);
   };
+  const onSubmit = (e: React.FormEvent) => {
+    onInsert(todo);
+    setTodo('');
+    e.preventDefault();
+  };
   return (
     <>
-      <input
-        type="text"
-        placeholder="Add a task"
-        onChange={onChangeHandler}
-        value={todo}
-      />
-      <button type="button">submit</button>
+      <form onSubmit={onSubmit}>
+        <input
+          type="text"
+          placeholder="Add a task"
+          onChange={onChangeHandler}
+          value={todo}
+        />
+        <button type="submit">submit</button>
+      </form>
     </>
   );
 };
