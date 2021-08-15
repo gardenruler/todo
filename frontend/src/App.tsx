@@ -1,6 +1,7 @@
 import React from 'react';
 import TodoInput from './todo/TodoInput';
 import TodoList from './todo/TodoList';
+import './todo/Todo.scss';
 
 function App(): JSX.Element {
   const todoList = [];
@@ -9,8 +10,11 @@ function App(): JSX.Element {
   };
   return (
     <div className="App">
-      <TodoInput onInsert={onInsert} />
-      <TodoList />
+      <h1>TODO</h1>
+      <div className="main">
+        <TodoInput onInsert={onInsert} />
+        <TodoList />
+      </div>
     </div>
   );
 }

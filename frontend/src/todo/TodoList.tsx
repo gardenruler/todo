@@ -10,12 +10,19 @@ export interface TodoProps {
 }
 const TodoList = ({ todo }: TodoProps) => {
   return (
-    <ul>
-      <li>
-        <span>TDD training</span>
-        <button type="button">delete</button>
-      </li>
-    </ul>
+    <div className="listWrapper">
+      <ul>
+        <li className="done">
+          <button className="toggle" type="button">
+            {' '}
+          </button>
+          <span>TDD training</span>
+          <button className="delete" type="button">
+            ×
+          </button>
+        </li>
+      </ul>
+    </div>
   );
 };
 export default TodoList;

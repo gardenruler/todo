@@ -9,7 +9,7 @@ describe('<TodoForm/>', () => {
       <TodoInput onInsert={onInsert} />,
     );
     getByPlaceholderText('Add a task');
-    getByText('submit');
+    getByText('+');
   });
   it('change input', () => {
     const { getByPlaceholderText } = render(<TodoInput onInsert={onInsert} />);
@@ -27,7 +27,7 @@ describe('<TodoForm/>', () => {
       <TodoInput onInsert={onInsert} />,
     );
     const input = getByPlaceholderText('Add a task');
-    const button = getByText('submit');
+    const button = getByText('+');
     fireEvent.change(input, {
       target: {
         value: 'TDD training',
