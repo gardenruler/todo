@@ -12,7 +12,7 @@ describe('<Todolist/>', () => {
     const utils = render(<TodoList todo={todo} />);
     const { getByText } = utils;
     const span = getByText(todo.text);
-    const button = getByText('delete');
+    const button = getByText('×');
     return {
       ...utils,
       span,

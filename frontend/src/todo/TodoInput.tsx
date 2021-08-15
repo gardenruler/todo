@@ -17,13 +17,16 @@ const TodoInput = ({ onInsert }: TodoProps): JSX.Element => {
   return (
     <>
       <form onSubmit={onSubmit}>
-        <input
-          type="text"
-          placeholder="Add a task"
-          onChange={onChangeHandler}
-          value={todo}
-        />
-        <button type="submit">submit</button>
+        <div className="inputWrapper">
+          <input
+            className="todoInput"
+            type="text"
+            placeholder="Add a task"
+            onChange={onChangeHandler}
+            value={todo}
+          />
+          <button type="submit">+</button>
+        </div>
       </form>
     </>
   );
