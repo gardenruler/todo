@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 export interface Todo {
   id: string;
@@ -6,16 +6,19 @@ export interface Todo {
   done: boolean;
 }
 export interface TodoProps {
-  todo?: Todo;
+  todo: Todo;
   onToggle: (id: string) => void;
   onRemove: (id: string) => void;
 }
 const TodoList = ({ todo, onToggle, onRemove }: TodoProps) => {
+  const { id, text, done } = todo;
+  const toggle = useCallback(() => onToggle(id), [id, onToggle]);
+  const remove = useCallback(() => onRemove(id), [id, onRemove]);
   return (
     <div className="listWrapper">
       <ul>
         {todo && (
-          <li className={todo.done ? 'done' : ''}>
+          <li className={done ? 'done' : ''}>
             <button className="toggle" type="button">
               {' '}
             </button>
@@ -23,24 +26,14 @@ const TodoList = ({ todo, onToggle, onRemove }: TodoProps) => {
               role="button"
               tabIndex={0}
               style={{
-                textDecoration: todo.done ? 'line-through' : 'none',
+                textDecoration: done ? 'line-through' : 'none',
               }}
-              onClick={() => {
-                onToggle(todo.id);
-              }}
-              onKeyDown={() => {
-                onToggle(todo.id);
-              }}
+              onClick={toggle}
+              onKeyDown={toggle}
             >
-              {todo.text}
+              {text}
             </span>
-            <button
-              className="delete"
-              type="button"
-              onClick={() => {
-                onRemove(todo.id);
-              }}
-            >
+            <button className="delete" type="button" onClick={remove}>
               ×
             </button>
           </li>
