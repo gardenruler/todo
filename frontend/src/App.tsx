@@ -1,31 +1,35 @@
 import React from 'react';
 import TodoInput from './todo/TodoInput';
-import TodoList, { Todo } from './todo/TodoList';
+import TodoList from './todo/TodoList';
+import { Todo } from './todo/type';
 import './todo/Todo.scss';
 
 function App(): JSX.Element {
-  const todoList = [];
-
-  const todo: Todo = {
-    id: '1',
-    text: 'TDD training',
-    done: true,
-  };
+  const todoList: Todo[] = [
+    {
+      id: '1',
+      text: 'TDD training',
+      done: false,
+    },
+    {
+      id: '2',
+      text: 'going to home',
+      done: true,
+    },
+  ];
   const onInsert = (todoText: string) => {
-    todoList.push(todoText);
-  };
-  const onToggle = (id: string) => {
-    console.log(id);
-  };
-  const onRemove = (id: string) => {
-    console.log(id);
+    todoList.push({
+      id: '3',
+      text: todoText,
+      done: false,
+    });
   };
   return (
     <div className="App">
       <h1>TODO</h1>
       <div className="main">
         <TodoInput onInsert={onInsert} />
-        <TodoList todo={todo} onToggle={onToggle} onRemove={onRemove} />
+        <TodoList todoList={todoList} />
       </div>
     </div>
   );

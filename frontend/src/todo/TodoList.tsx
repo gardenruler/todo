@@ -1,43 +1,29 @@
-import React, { useCallback } from 'react';
+import React from 'react';
+import TodoItem from './TodoItem';
+import { Todo } from './type';
 
-export interface Todo {
-  id: string;
-  text: string;
-  done: boolean;
+export interface TodoListProps {
+  todoList: Todo[];
 }
-export interface TodoProps {
-  todo: Todo;
-  onToggle: (id: string) => void;
-  onRemove: (id: string) => void;
-}
-const TodoList = ({ todo, onToggle, onRemove }: TodoProps) => {
-  const { id, text, done } = todo;
-  const toggle = useCallback(() => onToggle(id), [id, onToggle]);
-  const remove = useCallback(() => onRemove(id), [id, onRemove]);
+const TodoList = ({ todoList }: TodoListProps): JSX.Element => {
+  const onToggle = (id: string) => {
+    console.log(id);
+  };
+  const onRemove = (id: string) => {
+    console.log(id);
+  };
   return (
     <div className="listWrapper">
       <ul>
-        {todo && (
-          <li className={done ? 'done' : ''}>
-            <button className="toggle" type="button">
-              {' '}
-            </button>
-            <span
-              role="button"
-              tabIndex={0}
-              style={{
-                textDecoration: done ? 'line-through' : 'none',
-              }}
-              onClick={toggle}
-              onKeyDown={toggle}
-            >
-              {text}
-            </span>
-            <button className="delete" type="button" onClick={remove}>
-              ×
-            </button>
-          </li>
-        )}
+        {todoList &&
+          todoList.map((todo) => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              onToggle={onToggle}
+              onRemove={onRemove}
+            />
+          ))}
       </ul>
     </div>
   );
