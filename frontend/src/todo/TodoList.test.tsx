@@ -1,27 +1,68 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import TodoList, { Todo, TodoProps } from './TodoList';
 
 describe('<Todolist/>', () => {
   const sampleTodo: Todo = {
-    id: 1,
+    id: '1',
     text: 'TDD training',
     done: false,
   };
-  const setup = ({ todo = sampleTodo }: TodoProps) => {
-    const utils = render(<TodoList todo={todo} />);
+  const setup = ({ todo = sampleTodo, onToggle, onRemove }: TodoProps) => {
+    const utils = render(
+      <TodoList todo={todo} onToggle={onToggle} onRemove={onRemove} />,
+    );
     const { getByText } = utils;
-    const span = getByText(todo.text);
-    const button = getByText('×');
+    const textSpan = getByText(todo.text);
+    const removeButton = getByText('×');
     return {
       ...utils,
-      span,
-      button,
+      textSpan,
+      removeButton,
     };
   };
+  const onToggle = jest.fn();
+  const onRemove = jest.fn();
+
   it('has span and button', () => {
-    const { span, button } = setup({ todo: sampleTodo });
-    expect(span).toBeTruthy();
-    expect(button).toBeTruthy();
+    const { textSpan, removeButton } = setup({
+      todo: sampleTodo,
+      onToggle,
+      onRemove,
+    });
+    expect(textSpan).toBeTruthy();
+    expect(removeButton).toBeTruthy();
+  });
+
+  it('shows line-through when done is true ', () => {
+    const { textSpan } = setup({
+      todo: { ...sampleTodo, done: true },
+      onToggle,
+      onRemove,
+    });
+    expect(textSpan).toHaveStyle('text-decoration: line-through;');
+  });
+
+  it('does not show line-through when done is false ', () => {
+    const { textSpan } = setup({
+      todo: { ...sampleTodo, done: false },
+      onToggle,
+      onRemove,
+    });
+    expect(textSpan).not.toHaveStyle('text-decoration: line-through;');
+  });
+
+  it('calls onToggle', () => {
+    const onToggle = jest.fn();
+    const { textSpan } = setup({ todo: sampleTodo, onToggle, onRemove });
+    fireEvent.click(textSpan);
+    expect(onToggle).toBeCalledWith(sampleTodo.id);
+  });
+
+  it('calls onRemove', () => {
+    const onRemove = jest.fn();
+    const { removeButton } = setup({ todo: sampleTodo, onToggle, onRemove });
+    fireEvent.click(removeButton);
+    expect(onRemove).toBeCalledWith(sampleTodo.id);
   });
 });
