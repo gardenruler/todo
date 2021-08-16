@@ -4,14 +4,14 @@ import { Todo } from './type';
 
 export interface TodoListProps {
   todoList: Todo[];
+  onToggle: (id: string) => void;
+  onRemove: (id: string) => void;
 }
-const TodoList = ({ todoList }: TodoListProps): JSX.Element => {
-  const onToggle = (id: string) => {
-    console.log(id);
-  };
-  const onRemove = (id: string) => {
-    console.log(id);
-  };
+const TodoList = ({
+  todoList,
+  onToggle,
+  onRemove,
+}: TodoListProps): JSX.Element => {
   return (
     <div className="listWrapper">
       <ul data-testid="TodoList">
