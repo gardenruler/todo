@@ -14,7 +14,7 @@ const TodoList = ({ todoList }: TodoListProps): JSX.Element => {
   };
   return (
     <div className="listWrapper">
-      <ul>
+      <ul data-testid="TodoList">
         {todoList &&
           todoList.map((todo) => (
             <TodoItem
