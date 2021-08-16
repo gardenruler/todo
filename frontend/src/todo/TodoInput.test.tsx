@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, getByText, render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import TodoInput from './TodoInput';
 
 describe('<TodoForm/>', () => {
@@ -8,8 +8,8 @@ describe('<TodoForm/>', () => {
     const { getByPlaceholderText, getByText } = render(
       <TodoInput onInsert={onInsert} />,
     );
-    getByPlaceholderText('Add a task');
-    getByText('+');
+    expect(getByPlaceholderText('Add a task')).toBeTruthy();
+    expect(getByText('+')).toBeTruthy();
   });
   it('change input', () => {
     const { getByPlaceholderText } = render(<TodoInput onInsert={onInsert} />);

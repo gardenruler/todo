@@ -17,8 +17,16 @@ describe('<TodoList/>', () => {
     },
   ];
 
+  const onToggle = jest.fn();
+  const onRemove = jest.fn();
   it('renders TodoList properly', () => {
-    const { getByText } = render(<TodoList todoList={sampleTodolist} />);
+    const { getByText } = render(
+      <TodoList
+        todoList={sampleTodolist}
+        onToggle={onToggle}
+        onRemove={onRemove}
+      />,
+    );
     expect(getByText(sampleTodolist[0].text)).toBeTruthy();
     expect(getByText(sampleTodolist[1].text)).toBeTruthy();
   });

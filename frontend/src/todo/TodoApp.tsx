@@ -28,10 +28,20 @@ const TodoApp = (): JSX.Element => {
     ]);
     nextId.current = String(Number(nextId.current) + 1);
   };
+  const onToggle = (todoId: string) => {
+    setTodoList(
+      todoList.map((todo) =>
+        todo.id === todoId ? { ...todo, done: !todo.done } : todo,
+      ),
+    );
+  };
+  const onRemove = (todoId: string) => {
+    setTodoList(todoList.filter((todo) => todo.id !== todoId));
+  };
   return (
     <div className="main">
       <TodoInput onInsert={onInsert} />
-      <TodoList todoList={todoList} />
+      <TodoList todoList={todoList} onToggle={onToggle} onRemove={onRemove} />
     </div>
   );
 };
