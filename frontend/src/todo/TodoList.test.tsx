@@ -19,7 +19,7 @@ describe('<TodoList/>', () => {
 
   it('renders TodoList properly', () => {
     const { getByText } = render(<TodoList todoList={sampleTodolist} />);
-    getByText(sampleTodolist[0].text);
-    getByText(sampleTodolist[1].text);
+    expect(getByText(sampleTodolist[0].text)).toBeTruthy();
+    expect(getByText(sampleTodolist[1].text)).toBeTruthy();
   });
 });
