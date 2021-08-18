@@ -1,6 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mariadb:testdb:3306/test
+    url: jdbc:mariadb://gardenruler-todo-testdb:3306/test
+    username: root
+    password: gardenruler
   jpa:
     hibernate:
       ddl-auto: update
