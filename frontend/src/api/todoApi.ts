@@ -10,8 +10,18 @@ const todoAPI = {
       throw new Error(e);
     }
   },
+  todoInsert: async (todo: TodoContent): Promise<Todo> => {
+    try {
+      const response = await axios.post<Todo>(`${BASE_URI}/tasks`, todo);
+      return response.data;
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
 };
-
+export interface TodoContent {
+  content: string;
+}
 export interface Todo {
   id: number;
   createdAt: string;
