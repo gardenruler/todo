@@ -35,4 +35,8 @@ public class Task {
     private String content;
 
     private boolean isDone;
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

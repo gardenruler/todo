@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -39,5 +40,10 @@ public class TaskController {
     @ResponseStatus(HttpStatus.CREATED)
     public Task createTask(@RequestBody Task task) {
         return taskService.createTask(task);
+    }
+
+    @PutMapping("/{id}")
+    public Task updateTask(@PathVariable("id") Long taskId, @RequestBody String content) {
+        return taskService.updateTask(taskId, content);
     }
 }

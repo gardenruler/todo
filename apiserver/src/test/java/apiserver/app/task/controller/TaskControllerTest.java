@@ -24,6 +24,8 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -153,6 +155,66 @@ public class TaskControllerTest {
                     .andExpect(jsonPath("$.content", containsString("TDD 훈련")));
 
             verify(taskService).createTask(any(Task.class));
+        }
+    }
+
+    @Nested
+    @DisplayName("PUT /tasks/{id} 요청은")
+    class Describe_put_tasks_id {
+        final Task taskTdd = TaskFixtures.tdd();
+        final Task taskDrinkWater = TaskFixtures.drinkWater();
+
+        @Nested
+        @DisplayName("만약 유효한 식별자로 할 일을 수정한다면")
+        class Context_with_valid_id {
+
+            @BeforeEach
+            void mocking() {
+                given(taskService.updateTask(anyLong(), anyString()))
+                        .willReturn(taskDrinkWater);
+            }
+
+            @Test
+            @DisplayName("식별자에 해당하는 할 일을 수정해서 리턴한다")
+            void It_updates_the_task_and_returns_it() throws Exception {
+                var request =
+                        RestDocumentationRequestBuilders.put("/tasks/{id}", taskTdd.getId())
+                                .content("{\"content\":\"물 마시기\"}");
+
+                mockMvc.perform(request)
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("물 마시기")))
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.content", containsString("물 마시기")));
+
+                verify(taskService).updateTask(anyLong(), anyString());
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 유효하지 않은 식별자로 할 일을 수정한다면")
+        class Context_with_invalid_id {
+            final Long invalidTaskId = taskTdd.getId() - taskDrinkWater.getId();
+
+            @BeforeEach
+            void mocking() {
+                given(taskService.updateTask(anyLong(), anyString()))
+                        .willThrow(new TaskNotFoundException("할 일을 찾을 수 없습니다."));
+            }
+
+            @Test
+            @DisplayName("할 일을 찾을 수 없다는 예외를 던진다")
+            void It_throws_task_not_found_exception() throws Exception {
+                var request =
+                        RestDocumentationRequestBuilders.put("/tasks/{id}", invalidTaskId)
+                                .content("{\"content\":\"물 마시기\"}");
+
+                mockMvc.perform(request)
+                        .andExpect(status().isNotFound());
+
+                verify(taskService).updateTask(anyLong(), anyString());
+
+            }
         }
     }
 }
