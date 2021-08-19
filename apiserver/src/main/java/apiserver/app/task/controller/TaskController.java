@@ -4,6 +4,7 @@ import apiserver.app.task.application.TaskService;
 import apiserver.app.task.domain.Task;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,5 +46,11 @@ public class TaskController {
     @PutMapping("/{id}")
     public Task updateTask(@PathVariable("id") Long taskId, @RequestBody String content) {
         return taskService.updateTask(taskId, content);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTask(@PathVariable("id") Long taskId) {
+        taskService.deleteTask(taskId);
     }
 }

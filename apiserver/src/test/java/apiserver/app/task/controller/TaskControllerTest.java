@@ -217,4 +217,27 @@ public class TaskControllerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("DELETE /tasks/{id} 요청은")
+    class Describe_delete_tasks_id {
+        final Task task = TaskFixtures.tdd();
+
+        @Nested
+        @DisplayName("만약 유효한 식별자로 할 일을 삭제한다면")
+        class Context_with_valid_id {
+
+            @Test
+            @DisplayName("204 NO_CONTENT 상태 코드를 응답한다")
+            void It_responds_204_status_code() throws Exception {
+                var request =
+                        RestDocumentationRequestBuilders.delete("/tasks/{id}", task.getId());
+
+                mockMvc.perform(request)
+                        .andExpect(status().isNoContent());
+
+                verify(taskService).deleteTask(anyLong());
+            }
+        }
+    }
 }

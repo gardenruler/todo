@@ -62,4 +62,14 @@ public class TaskService {
         task.setContent(content);
         return task;
     }
+
+    /**
+     * 할 일을 삭제합니다.
+     *
+     * @param taskId 할 일 식별자
+     */
+    public void deleteTask(Long taskId) {
+        getTask(taskId);
+        taskRepository.deleteById(taskId);
+    }
 }
