@@ -1,19 +1,23 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import TodoList from './TodoList';
-import { Todo } from './type';
+import { Todo } from '../api/todoApi';
 
 describe('<TodoList/>', () => {
   const sampleTodolist: Todo[] = [
     {
-      id: '1',
-      text: 'TDD training',
+      id: 1,
+      createdAt: '2021-08-17T11:40:25.528669',
+      updatedAt: '2021-08-17T11:40:25.528709',
+      content: 'TDD Training',
       done: false,
     },
     {
-      id: '2',
-      text: 'going to home',
-      done: true,
+      id: 2,
+      createdAt: '2021-08-18T10:22:46.657558',
+      updatedAt: '2021-08-18T10:22:46.657605',
+      content: 'go back home',
+      done: false,
     },
   ];
 
@@ -27,7 +31,7 @@ describe('<TodoList/>', () => {
         onRemove={onRemove}
       />,
     );
-    expect(getByText(sampleTodolist[0].text)).toBeTruthy();
-    expect(getByText(sampleTodolist[1].text)).toBeTruthy();
+    expect(getByText(sampleTodolist[0].content)).toBeTruthy();
+    expect(getByText(sampleTodolist[1].content)).toBeTruthy();
   });
 });

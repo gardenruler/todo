@@ -1,24 +1,29 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import TodoInput from './TodoInput';
 import TodoList from './TodoList';
-import { Todo } from './type';
+import todoAPI, { Todo } from '../api/todoApi';
 
 const TodoApp = (): JSX.Element => {
-  const [todoList, setTodoList] = useState<Todo[]>([
-    {
-      id: '1',
-      text: 'TDD 배우기',
-      done: false,
-    },
-    {
-      id: '2',
-      text: 'react-testing-library 배우기',
-      done: true,
-    },
-  ]);
-  const nextId = useRef('3');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [todoList, setTodoList] = useState<Todo[] | null>(null);
+
+  const onLoadTodoList = async () => {
+    setLoading(true);
+    try {
+      const todoResult = await todoAPI.todoList();
+      setTodoList(todoResult);
+    } catch (e) {
+      setError(e);
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
+    onLoadTodoList();
+  }, []);
+
   const onInsert = (todoText: string) => {
-    setTodoList([
+    /* setTodoList([
       ...todoList,
       {
         id: nextId.current,
@@ -27,22 +32,40 @@ const TodoApp = (): JSX.Element => {
       },
     ]);
     nextId.current = String(Number(nextId.current) + 1);
+    */
   };
-  const onToggle = (todoId: string) => {
+  const onToggle = (todoId: number) => {
+    /*
     setTodoList(
       todoList.map((todo) =>
         todo.id === todoId ? { ...todo, done: !todo.done } : todo,
       ),
     );
+    */
   };
-  const onRemove = (todoId: string) => {
+  const onRemove = (todoId: number) => {
+    /*
     setTodoList(todoList.filter((todo) => todo.id !== todoId));
+    */
   };
+
+  if (error) return <div>{error}</div>;
+
+  if (loading)
+    return (
+      <div className="loadingWrapper" data-testid="loader">
+        <div className="loader"> </div>
+      </div>
+    );
+
   return (
-    <div className="main">
-      <TodoInput onInsert={onInsert} />
-      <TodoList todoList={todoList} onToggle={onToggle} onRemove={onRemove} />
-    </div>
+    <>
+      <h1>TODO</h1>
+      <div className="main">
+        <TodoInput onInsert={onInsert} />
+        <TodoList todoList={todoList} onToggle={onToggle} onRemove={onRemove} />
+      </div>
+    </>
   );
 };
 
