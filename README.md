@@ -9,4 +9,7 @@ docker-compose up -d
 docker-compose down
 # DB만 실행
 docker-compose -f docker-compose-local-db.yaml up -d
+# 실행 전 이미지 빌드
+docker-compose up --build
 ```
+

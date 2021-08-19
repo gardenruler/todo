@@ -4,7 +4,6 @@ import apiserver.app.task.domain.Task;
 import apiserver.app.task.domain.TaskFixtures;
 import apiserver.app.task.domain.TaskRepository;
 import apiserver.app.task.exception.TaskNotFoundException;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -121,4 +120,47 @@ class TaskServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("updateTask 메서드는")
+    class Describe_updateTask {
+        final Task taskTdd = TaskFixtures.tdd();
+        final Task taskDrinkWater = TaskFixtures.drinkWater();
+
+        @Nested
+        @DisplayName("만약 유효한 식별자로 할 일을 수정한다면")
+        class Context_with_valid_id {
+
+            @BeforeEach
+            void mocking() {
+                given(taskRepository.findById(taskTdd.getId()))
+                        .willReturn(Optional.ofNullable(taskTdd));
+            }
+
+            @Test
+            @DisplayName("식별자에 해당하는 할 일을 조회해서 리턴한다")
+            void It_updates_the_task_and_returns_it() {
+                Task result = taskService.updateTask(taskTdd.getId(), taskDrinkWater);
+                assertThat(result.getContent()).isEqualTo("물 마시기");
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 유효하지 않은 식별자로 할 일을 수정한다면")
+        class Context_with_invalid_id {
+            final Long invalidTaskId = taskTdd.getId() - taskDrinkWater.getId();
+
+            @BeforeEach
+            void mocking() {
+                given(taskRepository.findById(invalidTaskId))
+                        .willThrow(new TaskNotFoundException("할 일을 찾을 수 없습니다."));
+            }
+
+            @Test
+            @DisplayName("할 일을 찾을 수 없다는 예외를 던진다")
+            void It_throws_task_not_found_exception() {
+                assertThatThrownBy(() -> taskService.updateTask(invalidTaskId, taskDrinkWater))
+                        .isInstanceOf(TaskNotFoundException.class);
+            }
+        }
+    }
 }

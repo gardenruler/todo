@@ -23,6 +23,7 @@ public class TaskService {
      *
      * @return 할 일 목록
      */
+    @Transactional(readOnly = true)
     public List<Task> listTasks() {
         return taskRepository.findAll();
     }
@@ -43,8 +44,32 @@ public class TaskService {
      * @param taskId 할 일 식별자
      * @return 할 일
      */
+    @Transactional(readOnly = true)
     public Task getTask(Long taskId) {
         return taskRepository.findById(taskId)
                 .orElseThrow(() -> new TaskNotFoundException("할 일을 찾을 수 없습니다."));
+    }
+
+    /**
+     * 할 일을 수정해서 리턴합니다.
+     *
+     * @param taskId 할 일 식별자
+     * @param source 수정 데이터
+     * @return 수정된 할 일
+     */
+    public Task updateTask(Long taskId, Task source) {
+        Task task = getTask(taskId);
+        task.changeWith(source);
+        return task;
+    }
+
+    /**
+     * 할 일을 삭제합니다.
+     *
+     * @param taskId 할 일 식별자
+     */
+    public void deleteTask(Long taskId) {
+        getTask(taskId);
+        taskRepository.deleteById(taskId);
     }
 }
