@@ -8,31 +8,28 @@ const TodoApp = (): JSX.Element => {
   const [loading, setLoading] = useState(false);
   const [todoList, setTodoList] = useState<Todo[] | null>(null);
 
-  const onLoadTodoList = async () => {
-    setLoading(true);
+  useEffect(() => {
+    const onLoadTodoList = async () => {
+      setLoading(true);
+      try {
+        const todoResult = await todoAPI.todoList();
+        setTodoList(todoResult);
+      } catch (e) {
+        setError(e);
+      }
+      setLoading(false);
+    };
+    onLoadTodoList();
+  }, []);
+
+  const onInsert = async (todoText: string) => {
     try {
-      const todoResult = await todoAPI.todoList();
-      setTodoList(todoResult);
+      const todoResult = await todoAPI.todoInsert({ content: todoText });
+      setTodoList(todoList ? [...todoList, todoResult] : [todoResult]);
     } catch (e) {
       setError(e);
     }
     setLoading(false);
-  };
-  useEffect(() => {
-    onLoadTodoList();
-  }, []);
-
-  const onInsert = (todoText: string) => {
-    /* setTodoList([
-      ...todoList,
-      {
-        id: nextId.current,
-        text: todoText,
-        done: false,
-      },
-    ]);
-    nextId.current = String(Number(nextId.current) + 1);
-    */
   };
   const onToggle = (todoId: number) => {
     /*

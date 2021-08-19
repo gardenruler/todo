@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, fireEvent } from '@testing-library/react';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import TodoApp from './TodoApp';
@@ -23,24 +23,33 @@ describe('<TodoApp/>', () => {
       done: false,
     },
   ]);
+  mock.onPost(`${BASE_URI}/tasks`).reply(200, {
+    id: 3,
+    createdAt: '2021-08-17T11:40:25.528669',
+    updatedAt: '2021-08-17T11:40:25.528709',
+    content: 'new Todo',
+    done: false,
+  });
+
   it('loads TodoList properly', async () => {
-    // TODO
     const { getByText, getByTestId } = render(<TodoApp />);
     await waitFor(() => expect(getByTestId('loader')).toBeTruthy());
     await waitFor(() => expect(getByText('TDD Training')).toBeTruthy());
   });
 
-  it('add new todo', () => {
+  it('add new todo', async () => {
     const { getByPlaceholderText, getByText } = render(<TodoApp />);
-    /*
-    fireEvent.change(getByPlaceholderText('Add a task'), {
+    await waitFor(() =>
+      expect(getByPlaceholderText('Add a task')).toBeTruthy(),
+    );
+    await fireEvent.change(getByPlaceholderText('Add a task'), {
       target: {
         value: 'new Todo',
       },
     });
-    fireEvent.click(getByText('+'));
-    expect(getByText('new Todo')).toBeTruthy();
-    */
+    await waitFor(() => expect(getByText('+')).toBeTruthy());
+    await fireEvent.click(getByText('+'));
+    await waitFor(() => expect(getByText('new Todo')).toBeInTheDocument());
   });
 
   it('toggles todo done', () => {
