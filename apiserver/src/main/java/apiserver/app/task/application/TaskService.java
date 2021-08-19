@@ -54,12 +54,12 @@ public class TaskService {
      * 할 일을 수정해서 리턴합니다.
      *
      * @param taskId 할 일 식별자
-     * @param content 할 일 내용
+     * @param source 수정 데이터
      * @return 수정된 할 일
      */
-    public Task updateTask(long taskId, String content) {
+    public Task updateTask(Long taskId, Task source) {
         Task task = getTask(taskId);
-        task.setContent(content);
+        task.changeWith(source);
         return task;
     }
 

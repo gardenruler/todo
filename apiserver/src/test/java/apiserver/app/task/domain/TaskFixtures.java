@@ -12,6 +12,7 @@ public class TaskFixtures {
         return Task.builder()
                 .id(1L)
                 .content("물 마시기")
+                .done(true)
                 .build();
     }
 }

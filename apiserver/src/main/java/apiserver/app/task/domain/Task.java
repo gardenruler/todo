@@ -34,9 +34,15 @@ public class Task {
 
     private String content;
 
-    private boolean isDone;
+    private boolean done;
 
-    public void setContent(String content) {
-        this.content = content;
+    /**
+     * 할 일을 수정합니다.
+     * 
+     * @param source 수정 데이터
+     */
+    public void changeWith(Task source) {
+        this.content = source.content;
+        this.done = source.done;
     }
 }

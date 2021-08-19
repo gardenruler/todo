@@ -139,7 +139,7 @@ class TaskServiceTest {
             @Test
             @DisplayName("식별자에 해당하는 할 일을 조회해서 리턴한다")
             void It_updates_the_task_and_returns_it() {
-                Task result = taskService.updateTask(taskTdd.getId(), taskDrinkWater.getContent());
+                Task result = taskService.updateTask(taskTdd.getId(), taskDrinkWater);
                 assertThat(result.getContent()).isEqualTo("물 마시기");
             }
         }
@@ -158,7 +158,7 @@ class TaskServiceTest {
             @Test
             @DisplayName("할 일을 찾을 수 없다는 예외를 던진다")
             void It_throws_task_not_found_exception() {
-                assertThatThrownBy(() -> taskService.updateTask(invalidTaskId, taskDrinkWater.getContent()))
+                assertThatThrownBy(() -> taskService.updateTask(invalidTaskId, taskDrinkWater))
                         .isInstanceOf(TaskNotFoundException.class);
             }
         }

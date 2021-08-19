@@ -25,7 +25,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -152,7 +151,9 @@ public class TaskControllerTest {
             mockMvc.perform(request)
                     .andExpect(status().isCreated())
                     .andExpect(content().string(containsString("TDD 훈련")))
-                    .andExpect(jsonPath("$.content", containsString("TDD 훈련")));
+                    .andExpect(jsonPath("$.id", is(1)))
+                    .andExpect(jsonPath("$.content", containsString("TDD 훈련")))
+                    .andExpect(jsonPath("$.done", is(false)));
 
             verify(taskService).createTask(any(Task.class));
         }
@@ -170,7 +171,7 @@ public class TaskControllerTest {
 
             @BeforeEach
             void mocking() {
-                given(taskService.updateTask(anyLong(), anyString()))
+                given(taskService.updateTask(anyLong(), any(Task.class)))
                         .willReturn(taskDrinkWater);
             }
 
@@ -179,15 +180,18 @@ public class TaskControllerTest {
             void It_updates_the_task_and_returns_it() throws Exception {
                 var request =
                         RestDocumentationRequestBuilders.put("/tasks/{id}", taskTdd.getId())
-                                .content("{\"content\":\"물 마시기\"}");
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(taskDrinkWater));
 
                 mockMvc.perform(request)
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("물 마시기")))
                         .andExpect(jsonPath("$.id", is(1)))
-                        .andExpect(jsonPath("$.content", containsString("물 마시기")));
+                        .andExpect(jsonPath("$.content", containsString("물 마시기")))
+                        .andExpect(jsonPath("$.done", is(true)));
 
-                verify(taskService).updateTask(anyLong(), anyString());
+                verify(taskService).updateTask(anyLong(), any(Task.class));
             }
         }
 
@@ -198,7 +202,7 @@ public class TaskControllerTest {
 
             @BeforeEach
             void mocking() {
-                given(taskService.updateTask(anyLong(), anyString()))
+                given(taskService.updateTask(anyLong(), any(Task.class)))
                         .willThrow(new TaskNotFoundException("할 일을 찾을 수 없습니다."));
             }
 
@@ -207,12 +211,14 @@ public class TaskControllerTest {
             void It_throws_task_not_found_exception() throws Exception {
                 var request =
                         RestDocumentationRequestBuilders.put("/tasks/{id}", invalidTaskId)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"content\":\"물 마시기\"}");
 
                 mockMvc.perform(request)
                         .andExpect(status().isNotFound());
 
-                verify(taskService).updateTask(anyLong(), anyString());
+                verify(taskService).updateTask(anyLong(), any(Task.class));
 
             }
         }
