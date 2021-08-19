@@ -1,12 +1,14 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import TodoItem, { TodoProps } from './TodoItem';
-import { Todo } from './type';
+import { Todo } from '../api/todoApi';
 
 describe('<TodoItem/>', () => {
   const sampleTodo: Todo = {
-    id: '1',
-    text: 'TDD training',
+    id: 1,
+    createdAt: '2021-08-17T11:40:25.528669',
+    updatedAt: '2021-08-17T11:40:25.528709',
+    content: 'TDD Training',
     done: false,
   };
   const setup = ({ todo = sampleTodo, onToggle, onRemove }: TodoProps) => {
@@ -14,7 +16,7 @@ describe('<TodoItem/>', () => {
       <TodoItem todo={todo} onToggle={onToggle} onRemove={onRemove} />,
     );
     const { getByText } = utils;
-    const textSpan = getByText(todo.text);
+    const textSpan = getByText(todo.content);
     const removeButton = getByText('×');
     return {
       ...utils,

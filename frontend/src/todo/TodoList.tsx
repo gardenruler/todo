@@ -1,11 +1,11 @@
 import React from 'react';
 import TodoItem from './TodoItem';
-import { Todo } from './type';
+import { Todo } from '../api/todoApi';
 
 export interface TodoListProps {
-  todoList: Todo[];
-  onToggle: (id: string) => void;
-  onRemove: (id: string) => void;
+  todoList: Todo[] | null;
+  onToggle: (id: number) => void;
+  onRemove: (id: number) => void;
 }
 const TodoList = ({
   todoList,

@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
-import { Todo } from './type';
+import { Todo } from '../api/todoApi';
 
 export interface TodoProps {
   todo: Todo;
-  onToggle: (id: string) => void;
-  onRemove: (id: string) => void;
+  onToggle: (id: number) => void;
+  onRemove: (id: number) => void;
 }
 const TodoItem = ({ todo, onToggle, onRemove }: TodoProps): JSX.Element => {
-  const { id, text, done } = todo;
+  const { id, content, done } = todo;
   const toggle = useCallback(() => onToggle(id), [id, onToggle]);
   const remove = useCallback(() => onRemove(id), [id, onRemove]);
   return (
@@ -24,7 +24,7 @@ const TodoItem = ({ todo, onToggle, onRemove }: TodoProps): JSX.Element => {
         onClick={toggle}
         onKeyDown={toggle}
       >
-        {text}
+        {content}
       </span>
       <button className="delete" type="button" onClick={remove}>
         ×
