@@ -24,6 +24,9 @@ input{
         outline: none;
     }
 }
+div{
+    box-sizing: border-box;
+}
 .App{
     margin:0 auto;
     max-width: 30rem;
@@ -34,7 +37,7 @@ input{
 }
 
 .main{
-    div{
+    .inputWrapper, .listWrapper{
         background-color: white;
         box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
         border-radius: 0.3rem;
@@ -66,6 +69,7 @@ input{
     }
 
 }
+
 .listWrapper{
     padding: 0.2rem 1rem;
     li{
@@ -90,6 +94,15 @@ input{
     span{
         width:100%;
         text-align: left;
+    }
+    input{
+        border: 1px solid $creamTeal;
+        height: 2rem;
+        padding-left: 0.5rem;
+        font-size: 1.2rem;
+        width:90%;
+        color: $gray;
+        box-sizing: border-box;
     }
     .toggle{
         width:100%;
