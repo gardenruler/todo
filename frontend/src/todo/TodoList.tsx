@@ -6,11 +6,13 @@ export interface TodoListProps {
   todoList: Todo[] | null;
   onToggle: (id: number) => void;
   onRemove: (id: number) => void;
+  onEdit: (todo: Todo) => void;
 }
 const TodoList = ({
   todoList,
   onToggle,
   onRemove,
+  onEdit,
 }: TodoListProps): JSX.Element => {
   return (
     <div className="listWrapper">
@@ -22,6 +24,7 @@ const TodoList = ({
               todo={todo}
               onToggle={onToggle}
               onRemove={onRemove}
+              onEdit={onEdit}
             />
           ))}
       </ul>

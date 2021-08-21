@@ -1,5 +1,10 @@
 import React from 'react';
-import { render, waitFor, fireEvent } from '@testing-library/react';
+import {
+  render,
+  waitFor,
+  fireEvent,
+  getAllByTestId,
+} from '@testing-library/react';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import TodoApp from './TodoApp';
@@ -28,6 +33,14 @@ describe('<TodoApp/>', () => {
     createdAt: '2021-08-17T11:40:25.528669',
     updatedAt: '2021-08-17T11:40:25.528709',
     content: 'new Todo',
+    done: false,
+  });
+
+  mock.onPut(`${BASE_URI}/tasks`).reply(200, {
+    id: 2,
+    createdAt: '2021-08-18T10:22:46.657558',
+    updatedAt: '2021-08-18T10:22:46.657605',
+    content: 'edited Todo',
     done: false,
   });
 

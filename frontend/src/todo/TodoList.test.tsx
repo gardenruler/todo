@@ -23,12 +23,14 @@ describe('<TodoList/>', () => {
 
   const onToggle = jest.fn();
   const onRemove = jest.fn();
+  const onEdit = jest.fn();
   it('renders TodoList properly', () => {
     const { getByText } = render(
       <TodoList
         todoList={sampleTodolist}
         onToggle={onToggle}
         onRemove={onRemove}
+        onEdit={onEdit}
       />,
     );
     expect(getByText(sampleTodolist[0].content)).toBeTruthy();
