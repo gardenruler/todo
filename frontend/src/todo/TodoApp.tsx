@@ -27,23 +27,63 @@ const TodoApp = (): JSX.Element => {
       const todoResult = await todoAPI.todoInsert({ content: todoText });
       setTodoList(todoList ? [...todoList, todoResult] : [todoResult]);
     } catch (e) {
-      setError(e);
+      setError(String(e));
     }
     setLoading(false);
   };
-  const onToggle = (todoId: number) => {
-    /*
-    setTodoList(
-      todoList.map((todo) =>
-        todo.id === todoId ? { ...todo, done: !todo.done } : todo,
-      ),
-    );
-    */
+
+  const onEdit = async (editedTodo: Todo) => {
+    try {
+      if (!todoList) return;
+      const todoResult = await todoAPI.todoPut(editedTodo);
+      setTodoList(
+        todoList?.map((todo) =>
+          todo.id === todoResult.id
+            ? {
+                ...todoResult,
+              }
+            : todo,
+        ),
+      );
+    } catch (e) {
+      setError(String(e));
+    }
+    setLoading(false);
   };
-  const onRemove = (todoId: number) => {
-    /*
-    setTodoList(todoList.filter((todo) => todo.id !== todoId));
-    */
+
+  const onToggle = async (todoId: number) => {
+    try {
+      if (!todoList) return;
+      const payload = {
+        done: !todoList.filter((todo) => todo.id === todoId)[0].done,
+      };
+      const todoResult = await todoAPI.todoToggle(todoId, payload);
+      setTodoList(
+        todoList?.map((todo) =>
+          todo.id === todoResult.id
+            ? {
+                ...todo,
+                done: todoResult.done,
+              }
+            : todo,
+        ),
+      );
+    } catch (e) {
+      setError(String(e));
+    }
+    setLoading(false);
+  };
+
+  const onRemove = async (todoId: number) => {
+    try {
+      if (!todoList) return;
+      const todoResult = await todoAPI.todoDelete(todoId);
+      setTodoList([...todoList, todoResult]);
+    } catch (e) {
+      setError(String(e));
+    }
+    setLoading(false);
+    setTodoList(todoList?.filter((todo) => todo.id !== todoId) || null);
   };
 
   if (error) return <div>{error}</div>;
@@ -60,7 +100,12 @@ const TodoApp = (): JSX.Element => {
       <h1>TODO</h1>
       <div className="main">
         <TodoInput onInsert={onInsert} />
-        <TodoList todoList={todoList} onToggle={onToggle} onRemove={onRemove} />
+        <TodoList
+          todoList={todoList}
+          onToggle={onToggle}
+          onEdit={onEdit}
+          onRemove={onRemove}
+        />
       </div>
     </>
   );

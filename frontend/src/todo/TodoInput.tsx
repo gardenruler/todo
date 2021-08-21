@@ -6,7 +6,7 @@ export interface TodoProps {
 
 const TodoInput = ({ onInsert }: TodoProps): JSX.Element => {
   const [todo, setTodo] = useState('');
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTodo(e.target.value);
   };
   const onSubmit = (e: React.FormEvent) => {
@@ -22,7 +22,7 @@ const TodoInput = ({ onInsert }: TodoProps): JSX.Element => {
             className="todoInput"
             type="text"
             placeholder="Add a task"
-            onChange={onChangeHandler}
+            onChange={onChange}
             value={todo}
           />
           <button type="submit">+</button>

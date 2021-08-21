@@ -10,7 +10,7 @@ const todoAPI = {
       throw new Error(e);
     }
   },
-  todoInsert: async (todo: TodoContent): Promise<Todo> => {
+  todoInsert: async (todo: { content: string }): Promise<Todo> => {
     try {
       const response = await axios.post<Todo>(`${BASE_URI}/tasks`, todo);
       return response.data;
@@ -18,10 +18,41 @@ const todoAPI = {
       throw new Error(e);
     }
   },
+  todoToggle: async (
+    todoId: number,
+    payload: { done: boolean },
+  ): Promise<Todo> => {
+    try {
+      const response = await axios.put<Todo>(
+        `${BASE_URI}/tasks/${todoId}`,
+        payload,
+      );
+      return response.data;
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+  todoPut: async (todo: Todo): Promise<Todo> => {
+    try {
+      const response = await axios.put<Todo>(
+        `${BASE_URI}/tasks/${todo.id}`,
+        todo,
+      );
+      return response.data;
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+  todoDelete: async (todoId: number): Promise<Todo> => {
+    try {
+      const response = await axios.delete<Todo>(`${BASE_URI}/tasks/${todoId}`);
+      return response.data;
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
 };
-export interface TodoContent {
-  content: string;
-}
 export interface Todo {
   id: number;
   createdAt: string;
