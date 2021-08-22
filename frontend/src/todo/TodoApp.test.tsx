@@ -1,14 +1,9 @@
 import React from 'react';
-import {
-  render,
-  waitFor,
-  fireEvent,
-  getAllByTestId,
-} from '@testing-library/react';
+import { render, waitFor, fireEvent } from '@testing-library/react';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import TodoApp from './TodoApp';
-import TodoAPI, { BASE_URI, Todo } from '../api/todoApi';
+import { BASE_URI } from '../api/todoApi';
 
 describe('<TodoApp/>', () => {
   const mock = new MockAdapter(axios, { delayResponse: 200 });
@@ -36,13 +31,23 @@ describe('<TodoApp/>', () => {
     done: false,
   });
 
-  mock.onPut(`${BASE_URI}/tasks`).reply(200, {
+  mock.onPut(`${BASE_URI}/tasks/2`).reply(200, {
     id: 2,
     createdAt: '2021-08-18T10:22:46.657558',
     updatedAt: '2021-08-18T10:22:46.657605',
-    content: 'edited Todo',
+    content: 'edit my todo',
     done: false,
   });
+
+  mock.onPatch(`${BASE_URI}/tasks/2`).reply(200, {
+    id: 2,
+    createdAt: '2021-08-18T10:22:46.657558',
+    updatedAt: '2021-08-18T10:22:46.657605',
+    content: 'go back home',
+    done: true,
+  });
+
+  mock.onDelete(`${BASE_URI}/tasks/2`).reply(200);
 
   it('loads TodoList properly', async () => {
     const { getByText, getByTestId } = render(<TodoApp />);
@@ -65,44 +70,55 @@ describe('<TodoApp/>', () => {
     await waitFor(() => expect(getByText('new Todo')).toBeInTheDocument());
   });
 
-  it('toggles todo done', () => {
-    const { getByPlaceholderText, getByText } = render(<TodoApp />);
-    /*
-    fireEvent.change(getByPlaceholderText('Add a task'), {
+  it('edit todo', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const { getByTestId, getAllByTestId, getByText } = render(<TodoApp />);
+    const editButton = await waitFor(() => getAllByTestId('edit'));
+    if (!editButton) return;
+    fireEvent.click(editButton[1]);
+    const editInput = await waitFor(() => getByTestId('editInput'));
+    fireEvent.change(editInput, {
       target: {
-        value: 'new Todo',
+        value: 'edit my todo',
       },
     });
-    fireEvent.click(getByText('+'));
-    const spanText = getByText('new Todo');
-
-    // toggle todo
-    fireEvent.click(spanText);
-    expect(spanText).toHaveStyle('text-decoration: line-through;');
-
-    fireEvent.click(spanText);
-    expect(spanText).not.toHaveStyle('text-decoration: line-through;');
-    */
+    const saveButton = await getByTestId('saveButton');
+    fireEvent.click(saveButton);
+    const onEdit = jest.fn();
+    await waitFor(() => expect(onEdit));
+    await waitFor(() => expect(getByText('edit my todo')).toBeInTheDocument());
   });
 
-  it('removes todo', () => {
-    /*
-    const { getByPlaceholderText, getByText } = render(<TodoApp />);
-    // add todo
-    fireEvent.change(getByPlaceholderText('Add a task'), {
-      target: {
-        value: 'new Todo',
-      },
-    });
-    fireEvent.click(getByText('+'));
-    const spanText = getByText('new Todo');
+  it('removes todo', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const { getByText, getAllByText } = render(<TodoApp />);
+
+    await waitFor(() => expect(getByText('go back home')).toBeTruthy());
+    const todoText = getByText('go back home');
 
     // remove todo
-    const removeButton = spanText.nextSibling;
+    const removeButton = getAllByText('×');
 
     if (!removeButton) return;
-    fireEvent.click(removeButton);
-    expect(spanText).not.toBeInTheDocument(); // 페이지에서 사라졌음을 의미함
-    */
+    fireEvent.click(removeButton[1]);
+    await waitFor(() => expect(todoText).not.toBeInTheDocument());
+  });
+
+  it('toggles todo done', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const { getByText, getAllByTestId } = render(<TodoApp />);
+
+    await waitFor(() => expect(getByText('go back home')).toBeTruthy());
+    const textSpan = getByText('go back home');
+
+    // toggle todo
+    const toggleButton = getAllByTestId('toggle');
+
+    if (!toggleButton) return;
+    fireEvent.click(toggleButton[1]);
+
+    await waitFor(() =>
+      expect(textSpan).not.toHaveStyle('text-decoration: line-through;'),
+    );
   });
 });
