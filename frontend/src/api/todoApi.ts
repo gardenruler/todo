@@ -23,7 +23,7 @@ const todoAPI = {
     payload: { done: boolean },
   ): Promise<Todo> => {
     try {
-      const response = await axios.put<Todo>(
+      const response = await axios.patch<Todo>(
         `${BASE_URI}/tasks/${todoId}`,
         payload,
       );

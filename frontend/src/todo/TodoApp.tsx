@@ -77,8 +77,7 @@ const TodoApp = (): JSX.Element => {
   const onRemove = async (todoId: number) => {
     try {
       if (!todoList) return;
-      const todoResult = await todoAPI.todoDelete(todoId);
-      setTodoList([...todoList, todoResult]);
+      await todoAPI.todoDelete(todoId);
     } catch (e) {
       setError(String(e));
     }
