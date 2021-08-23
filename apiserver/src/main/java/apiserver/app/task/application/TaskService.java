@@ -71,4 +71,15 @@ public class TaskService {
         getTask(taskId);
         taskRepository.deleteById(taskId);
     }
+
+    /**
+     * 할 일의 완료 상태를 변경합니다.
+     * @param taskId 할 일 식별자
+     */
+    public void done(Long taskId) {
+        var task = getTask(taskId);
+
+        task.done();
+        taskRepository.save(task);
+    }
 }

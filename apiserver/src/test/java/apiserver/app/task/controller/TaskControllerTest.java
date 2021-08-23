@@ -252,4 +252,30 @@ public class TaskControllerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("PATCH /tasks/{id} 요청은")
+    class Describe_patch_tasks_id {
+
+        final Task task = TaskFixtures.tdd();
+
+        @Nested
+        @DisplayName("만약 유효한 식별자로 할 일을 수정한다면")
+        class Context_with_valid_id {
+
+            @Test
+            @DisplayName("done 값을 변경해서 응답한다")
+            void It_changes_done_value_and_responds_ok() throws Exception {
+                var request =
+                    RestDocumentationRequestBuilders.patch("/tasks/{id}", task.getId());
+
+                mockMvc.perform(request)
+                    .andExpect(status().isOk());
+
+                verify(taskService).done(anyLong());
+            }
+
+        }
+        // TODO: void method mocking test
+    }
 }
