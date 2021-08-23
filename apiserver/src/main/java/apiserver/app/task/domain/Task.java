@@ -45,4 +45,8 @@ public class Task {
         this.content = source.content;
         this.done = source.done;
     }
+
+    public void done() {
+        this.done = !this.done;
+    }
 }
