@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 export const BASE_URI =
-  process.env.NODE_ENV === 'development' ? '' : 'http://localhost:8080';
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080'
+    : 'http://localhost:8080';
 const todoAPI = {
   todoList: async (): Promise<Todo[]> => {
     try {
