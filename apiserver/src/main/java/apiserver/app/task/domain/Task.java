@@ -1,17 +1,16 @@
 package apiserver.app.task.domain;
 
+import java.time.LocalDateTime;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.time.LocalDateTime;
 
 /**
  * 할 일
@@ -22,6 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,5 +34,15 @@ public class Task {
 
     private String content;
 
-    private boolean isDone;
+    private boolean done;
+
+    /**
+     * 할 일을 수정합니다.
+     *
+     * @param source 수정 데이터
+     */
+    public void changeWith(Task source) {
+        this.content = source.content;
+        this.done = source.done;
+    }
 }
