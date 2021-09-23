@@ -39,13 +39,7 @@ describe('<TodoApp/>', () => {
     done: false,
   });
 
-  mock.onPatch(`${BASE_URI}/tasks/2`).reply(200, {
-    id: 2,
-    createdAt: '2021-08-18T10:22:46.657558',
-    updatedAt: '2021-08-18T10:22:46.657605',
-    content: 'go back home',
-    done: true,
-  });
+  mock.onPatch(`${BASE_URI}/tasks/2`).reply(200);
 
   mock.onDelete(`${BASE_URI}/tasks/2`).reply(200);
 

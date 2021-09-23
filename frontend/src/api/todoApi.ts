@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-export const BASE_URI = 'http://localhost:8080';
+export const BASE_URI =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080'
+    : 'http://localhost:8080';
 const todoAPI = {
   todoList: async (): Promise<Todo[]> => {
     try {
@@ -18,15 +21,9 @@ const todoAPI = {
       throw new Error(e);
     }
   },
-  todoToggle: async (
-    todoId: number,
-    payload: { done: boolean },
-  ): Promise<Todo> => {
+  todoToggle: async (todoId: number): Promise<Todo> => {
     try {
-      const response = await axios.patch<Todo>(
-        `${BASE_URI}/tasks/${todoId}`,
-        payload,
-      );
+      const response = await axios.patch<Todo>(`${BASE_URI}/tasks/${todoId}`);
       return response.data;
     } catch (e) {
       throw new Error(e);

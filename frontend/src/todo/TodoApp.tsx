@@ -54,16 +54,13 @@ const TodoApp = (): JSX.Element => {
   const onToggle = async (todoId: number) => {
     try {
       if (!todoList) return;
-      const payload = {
-        done: !todoList.filter((todo) => todo.id === todoId)[0].done,
-      };
-      const todoResult = await todoAPI.todoToggle(todoId, payload);
+      await todoAPI.todoToggle(todoId);
       setTodoList(
         todoList?.map((todo) =>
-          todo.id === todoResult.id
+          todo.id === todoId
             ? {
                 ...todo,
-                done: todoResult.done,
+                done: !todo.done,
               }
             : todo,
         ),
